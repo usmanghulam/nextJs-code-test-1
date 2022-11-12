@@ -1,11 +1,28 @@
 
-import React from 'react'
+import React, { FC } from 'react'
+import Head from "next/head";
+import Image from 'next/image'
+
   
 const HomePage = () => {
   return (
-    <div className='text-3xl text-green-600 p-2'>
-      Hello Geeks!
+    <div className="my-8 bg-primary">
+    <Head>
+      <title>NextJs TailwindCSS E-commerce Website</title>
+      <meta
+        name="description"
+        content="a website to sell gently used kids' clothing"
+      />
+    </Head>
+    <div className="mt-4">
+    {/* <Image
+      src="https://thumbs.dreamstime.com/z/girl-shoping-mol-young-bags-shopping-102871284.jpg"
+      alt="Picture of the author"
+      width={500}
+      height={500}
+    /> */}
     </div>
+  </div>
   )
 }
   
