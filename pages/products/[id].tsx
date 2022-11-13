@@ -1,5 +1,6 @@
 import React from "react";
 import axios from 'axios';
+import Router from "next/router";
 import FavoriteIcon from "../../components/icons/favorite";
 import AddIcon from "../../components/icons/Add";
 import MinusIcon from "../../components/icons/Minus";
@@ -48,6 +49,9 @@ const ProductPage = ({ product }: { product: IProduct }) => {
           <div className="mt-12 flex flex-row justify-between ">
             <button
               className="border p-2 mb-8 border-black shadow-offset-lime w-2/3 font-bold"
+              onClick={() => {
+                Router.push('/checkout')
+              }}
             >
               Add to Shopping Cart
             </button>
