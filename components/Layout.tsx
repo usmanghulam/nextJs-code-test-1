@@ -1,9 +1,11 @@
 import { FC } from "react";
 import Link from "next/link";
+import { ToastContainer } from 'react-toastify';
 import UserIcon from "./icons/user";
 import ShoppingCartIcon from "./icons/shoppingCart";
 import FavoriteIcon from "./icons/favorite";
 
+import 'react-toastify/dist/ReactToastify.css';
 interface Props {
 	children: any;
 }
@@ -11,6 +13,7 @@ interface Props {
 const Layout: FC<Props> = ({ children }) => {
 	return (
 		<div className="">
+			<ToastContainer />
 			<header>
 				<div className="container mx-auto px-6 py-3">
 					<div className="flex items-center justify-between">

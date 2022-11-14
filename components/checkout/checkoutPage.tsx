@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
-import { Elements } from "@stripe/react-stripe-js"
-import { loadStripe } from "@stripe/stripe-js"
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
+import Router from "next/router";
+import { toast } from 'react-toastify';
 import OrderSummary from './orderSummary';
 import CheckoutForm from './checkoutForm';
 import { CheckoutFormValues } from '../../interfaces/checkoutForm';
-import StripePaymentForm from './StripePaymentForm';
+import Loader from '../loader';
 
-const PUBLIC_KEY = 'pk_test_51M44cRJAux9bv0yD5z5QrGrHxR3EGLpEXLJkKsa2uhZQ91zDJ6pCrKymwE0KYVABXCrRd5xD4EIoWTY0XTIkUQ5K00DQst8jox'
 const CheckoutPage = () => {
-	const stripeTestPromise = loadStripe(PUBLIC_KEY);
+	const [isLoading, setIsLoading] = useState(false);
+	const stripe = useStripe()
+	const elements = useElements()
 	const validateSchema = Yup.object().shape({
 		firstName: Yup.string().trim().required('Field is Required').matches(/^[aA-zZ\s]+$/, "Only Alphabets Are Allowed"),
 		lastName: Yup.string().trim().required('Field is Required').matches(/^[aA-zZ\s]+$/, "Only Alphabets Are Allowed"),
@@ -17,38 +19,44 @@ const CheckoutPage = () => {
 		address: Yup.string().trim().required('Field is Required'),
 		city: Yup.string().trim().required('Field is Required').matches(/^[aA-zZ\s]+$/, "Only Alphabets Are Allowed"),
 		postcode: Yup.string().trim().required('Field is Required').matches(/^[0-9]+$/, "Only Numbers Are Allowed"),
-		note: Yup.string().trim(),
-		cardName: Yup.string().trim().required('Field is Required').matches(/^[aA-zZ\s]+$/, "Only Alphabets Are Allowed"),
-		cardNumber: Yup.string().trim().required('Field is Required').matches(/^[0-9]+$/, "Only Numbers Are Allowed"),
-		cardExpirationMonth: Yup.string().trim().required('Field is Required'),
-		cardExpirationYear: Yup.string().trim().required('Field is Required'),
-		cardSecurityCode: Yup.string().trim().required('Field is Required').matches(/^[0-9]+$/, "Only Numbers Are Allowed"),
+		note: Yup.string().trim()
 	});
 
 	const submitFormHandler = async (values: CheckoutFormValues) => {
-		console.log('submit handler', values);
+		try {
+			setIsLoading(true);
+			const response = await stripe?.createPaymentMethod({
+				type: "card",
+				card: elements?.getElement(CardElement)
+			})
+			const token = response?.paymentMethod?.id;
+			if (token) {
+				toast.success("Success")
+				setTimeout(() => {
+					Router.push('/success');
+				}, 2000);
+			}
+			setIsLoading(false);
+		} catch (error) {
+			setIsLoading(false);
+			toast.error("Something went wrong")
+			console.log(error)
+		}
 	}
 
-	const submitPaymentHandler = (values: any) => {
-		console.log(values)
-
-	}
 	return <>
+		<Loader isLoading={isLoading} />
 		<div className="container p-12 mx-auto">
 			<div className="flex flex-col w-full px-0 mx-auto md:flex-row">
 				<div className="flex flex-col md:w-full">
 					<h2 className="mb-4 font-bold md:text-xl text-heading ">Shipping Address</h2>
 					<div className='mb-2 pb-2'>
-						<Elements stripe={stripeTestPromise}>
-							<StripePaymentForm {...{
-								submitPaymentHandler
-							}} />
-						</Elements>
+						<CheckoutForm {...{
+							validateSchema,
+							submitFormHandler,
+							isLoading
+						}} />
 					</div>
-					<CheckoutForm {...{
-						validateSchema,
-						submitFormHandler
-					}} />
 				</div>
 				<OrderSummary />
 			</div>

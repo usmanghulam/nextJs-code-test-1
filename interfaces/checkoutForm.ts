@@ -7,9 +7,4 @@ export interface CheckoutFormValues {
     city: string;
     postcode: string;
     note: string;
-    cardName: string;
-    cardNumber: string;
-    cardExpirationMonth: string;
-    cardExpirationYear: string;
-    cardSecurityCode: string;
 }

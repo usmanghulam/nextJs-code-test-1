@@ -1,12 +1,16 @@
 import React, { FC } from 'react'
 import { Formik } from 'formik';
+import StripePaymentForm from './StripePaymentForm';
 import { CheckoutFormValues } from '../../interfaces/checkoutForm';
+import Button from './Button';
 
 interface IProps {
 	validateSchema: any;
 	submitFormHandler: (values: CheckoutFormValues) => void;
+	isLoading: boolean;
 }
-const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
+
+const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler, isLoading }) => {
 	return <>
 		<Formik
 			initialValues={{
@@ -16,12 +20,7 @@ const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 				address: '',
 				city: '',
 				postcode: '',
-				note: '',
-				cardName: '',
-				cardNumber: '',
-				cardExpirationMonth: '',
-				cardExpirationYear: '',
-				cardSecurityCode: ''
+				note: ''
 			}}
 			validationSchema={validateSchema}
 			onSubmit={submitFormHandler}
@@ -39,7 +38,7 @@ const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 									value={values.firstName}
 									name="firstName"
 									type="text"
-									placeholder="firstName"
+									placeholder="First Name"
 									className="w-full px-4 py-3 text-sm border border-gray-300 rounded lg:text-sm focus:outline-none focus:ring-1 focus:ring-blue-600"
 								/>
 								{errors?.firstName && touched?.firstName && <span className='error-message'>{errors.firstName}</span>}
@@ -122,14 +121,7 @@ const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 								{errors?.postcode && touched?.postcode && <span className='error-message'>{errors.postcode}</span>}
 							</div>
 						</div>
-						<div className="flex items-center mt-4">
-							<label className="flex items-center text-sm group text-heading">
-								<input
-									type="checkbox"
-									className="w-5 h-5 border border-gray-300 rounded focus:outline-none focus:ring-1"
-								/>
-								<span className="ml-2">Save this information for next time</span></label>
-						</div>
+						<StripePaymentForm />
 						<div className="relative pt-1 xl:pt-6"><label htmlFor="note"
 							className="block mb-3 text-sm font-semibold text-gray-500"> Notes
 							(Optional)</label><textarea
@@ -142,10 +134,16 @@ const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 								placeholder="Notes for delivery"
 							/>
 						</div>
+						<div className="flex items-center mt-4">
+							<label className="flex items-center text-sm group text-heading">
+								<input
+									type="checkbox"
+									className="w-5 h-5 border border-gray-300 rounded focus:outline-none focus:ring-1"
+								/>
+								<span className="ml-2">Save this information for next time</span></label>
+						</div>
 						<div className="mt-4">
-							<button
-								type='submit'
-								className="w-full px-6 py-2 text-blue-200 bg-blue-600 hover:bg-blue-900">Process</button>
+							<Button isLoading={isLoading} />
 						</div>
 					</div>
 				</form>
