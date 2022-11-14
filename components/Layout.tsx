@@ -59,9 +59,6 @@ const Layout: FC<Props> = ({ children }) => {
 							<Link className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" href="/products">
 								Shop
 							</Link>
-							<Link href="/about" className="mt-3 text-gray-600 hover:underline sm:mx-3 sm:mt-0" >
-								About
-							</Link>
 						</div>
 					</nav>
 				</div>

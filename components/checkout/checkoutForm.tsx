@@ -1,13 +1,11 @@
 import React, { FC } from 'react'
 import { Formik } from 'formik';
-import PaymentForm from './paymentForm'
 import { CheckoutFormValues } from '../../interfaces/checkoutForm';
 
 interface IProps {
 	validateSchema: any;
 	submitFormHandler: (values: CheckoutFormValues) => void;
 }
-
 const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 	return <>
 		<Formik
@@ -132,9 +130,6 @@ const CheckoutForm: FC<IProps> = ({ validateSchema, submitFormHandler }) => {
 								/>
 								<span className="ml-2">Save this information for next time</span></label>
 						</div>
-						<PaymentForm {...{
-							errors, handleBlur, handleChange, touched, handleSubmit, values
-						}} />
 						<div className="relative pt-1 xl:pt-6"><label htmlFor="note"
 							className="block mb-3 text-sm font-semibold text-gray-500"> Notes
 							(Optional)</label><textarea
