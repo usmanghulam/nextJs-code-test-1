@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from 'axios';
 import Router from "next/router";
 import FavoriteIcon from "../../components/icons/favorite";
@@ -7,7 +7,11 @@ import MinusIcon from "../../components/icons/Minus";
 import { IProduct } from "../../interfaces/products";
 
 const ProductPage = ({ product }: { product: IProduct }) => {
+  const [counter, setCounter] = useState(1);
   const { image, category, description, id, price, rating, title } = product;
+  const setCounterHandler = (value: number) => {
+    setCounter(counter + value);
+  }
   return (
     <div className="container mx-auto px-6">
       <div className="md:flex md:items-center">
@@ -27,11 +31,13 @@ const ProductPage = ({ product }: { product: IProduct }) => {
           </span>
           <div className="mt-8">
             <label className="text-1xl" htmlFor="count">
-              Count: 0
+              Qty: {counter}
             </label>
             <div className="flex items-center mt-4">
               <button
                 className="border border-black w-36 h-12 text-gray-500 focus:outline-none focus:text-gray-600"
+                onClick={() => setCounterHandler(+1)}
+                disabled={counter > 4 ? true : false}
               >
                 <div className="flex justify-center">
                   <AddIcon />
@@ -39,6 +45,8 @@ const ProductPage = ({ product }: { product: IProduct }) => {
               </button>
               <button
                 className="border border-black w-36 h-12 text-gray-500 focus:outline-none focus:text-gray-600"
+                onClick={() => setCounterHandler(-1)}
+                disabled={counter === 0 ? true : false}
               >
                 <div className="flex justify-center">
                   <MinusIcon />
